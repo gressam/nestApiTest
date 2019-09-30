@@ -13,11 +13,12 @@ const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const car_module_1 = require("./car/car.module");
 const http_error_filter_1 = require("./shared/http-error.filter");
+const user_module_1 = require("./user/user.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [typeorm_1.TypeOrmModule.forRoot(), car_module_1.CarModule],
+        imports: [typeorm_1.TypeOrmModule.forRoot(), car_module_1.CarModule, user_module_1.UserModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, {
                 provide: core_1.APP_FILTER,

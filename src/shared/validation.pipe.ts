@@ -3,7 +3,7 @@ import {
   ArgumentMetadata,
   PipeTransform,
   HttpException,
-  HttpStatus,
+  HttpStatus, Logger,
 } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
@@ -48,9 +48,6 @@ export class ValidationPipe implements PipeTransform {
   }
 
   private isEmpty(value: any) {
-    if (Object.keys(value).length > 0) {
-      return false;
-    }
-    return true;
+    return (Object.keys(value).length <= 0);
   }
 }

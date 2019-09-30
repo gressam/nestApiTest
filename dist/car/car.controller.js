@@ -74,7 +74,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CarController.prototype, "destroy", null);
 CarController = __decorate([
-    common_1.Controller('car'),
+    common_1.Controller('api/car'),
     __metadata("design:paramtypes", [car_service_1.CarService])
 ], CarController);
 exports.CarController = CarController;

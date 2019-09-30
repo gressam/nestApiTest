@@ -39,10 +39,7 @@ let ValidationPipe = class ValidationPipe {
             .join(', ');
     }
     isEmpty(value) {
-        if (Object.keys(value).length > 0) {
-            return false;
-        }
-        return true;
+        return (Object.keys(value).length <= 0);
     }
 };
 ValidationPipe = __decorate([

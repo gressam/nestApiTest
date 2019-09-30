@@ -3,7 +3,7 @@ import { CarService } from './car.service';
 import { CarDTO } from './car.dto';
 import { ValidationPipe } from '../shared/validation.pipe';
 
-@Controller('car')
+@Controller('api/car')
 export class CarController {
 
   constructor(private carService: CarService) {
@@ -15,7 +15,7 @@ export class CarController {
   }
 
   @Post()
-  @UsePipes(new ValidationPipe() )
+  @UsePipes(new ValidationPipe())
   createCar(
     @Body() data: CarDTO,
   ) {
