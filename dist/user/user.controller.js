@@ -16,6 +16,7 @@ const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const user_dto_1 = require("./user.dto");
 const validation_pipe_1 = require("../shared/validation.pipe");
+const auth_guard_1 = require("../shared/auth.guard");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -32,6 +33,7 @@ let UserController = class UserController {
 };
 __decorate([
     common_1.Get('api/users'),
+    common_1.UseGuards(new auth_guard_1.AuthGuard()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
