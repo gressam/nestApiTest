@@ -29,7 +29,7 @@ __decorate([
     __metadata("design:type", String)
 ], CarEntity.prototype, "model", void 0);
 CarEntity = __decorate([
-    typeorm_1.Entity()
+    typeorm_1.Entity('car')
 ], CarEntity);
 exports.CarEntity = CarEntity;
 //# sourceMappingURL=car.entity.js.map
