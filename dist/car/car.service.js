@@ -29,15 +29,28 @@ let CarService = class CarService {
         return car;
     }
     async read(id) {
-        return await this.carRepository.findOne({ where: { id } });
+        const car = await this.carRepository.findOne({ where: { id } });
+        if (!car) {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
+        return car;
     }
     async update(id, data) {
+        let car = await this.carRepository.findOne({ where: { id } });
+        if (!car) {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.carRepository.update({ id }, data);
-        return await this.carRepository.findOne({ id });
+        car = await this.carRepository.findOne({ where: { id } });
+        return car;
     }
     async destroy(id) {
+        const car = await this.carRepository.findOne({ where: { id } });
+        if (!car) {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.carRepository.delete({ id });
-        return { deleted: true };
+        return car;
     }
 };
 CarService = __decorate([

@@ -1,4 +1,4 @@
-export interface CarDTO {
+export declare class CarDTO {
     brand: string;
     model: string;
 }

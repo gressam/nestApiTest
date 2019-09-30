@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Logger, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put, UsePipes } from '@nestjs/common';
 import { CarService } from './car.service';
 import { CarDTO } from './car.dto';
+import { ValidationPipe } from '../shared/validation.pipe';
 
 @Controller('car')
 export class CarController {
@@ -14,6 +15,7 @@ export class CarController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe() )
   createCar(
     @Body() data: CarDTO,
   ) {
@@ -28,6 +30,7 @@ export class CarController {
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   updateCar(
     @Param('id') id: string,
     @Body() data: Partial<CarDTO>,

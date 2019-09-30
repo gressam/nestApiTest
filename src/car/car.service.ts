@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CarEntity } from './car.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,17 +21,30 @@ export class CarService {
   }
 
   async read(id: string) {
-    return await this.carRepository.findOne({ where: { id } });
+    const car = await this.carRepository.findOne({ where: { id } });
+    if (!car) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+    return car;
   }
 
   async update(id: string, data: Partial<CarDTO>) {
+    let car = await this.carRepository.findOne({ where: { id } });
+    if (!car) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
     await this.carRepository.update({ id }, data);
-    return await this.carRepository.findOne({ id });
+    car = await this.carRepository.findOne({ where: { id } });
+    return car;
   }
 
   async destroy(id: string) {
+    const car = await this.carRepository.findOne({ where: { id } });
+    if (!car) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
     await this.carRepository.delete({ id });
-    return { deleted: true };
+    return car;
   }
 
 }

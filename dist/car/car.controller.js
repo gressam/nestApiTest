@@ -14,6 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const car_service_1 = require("./car.service");
+const car_dto_1 = require("./car.dto");
+const validation_pipe_1 = require("../shared/validation.pipe");
 let CarController = class CarController {
     constructor(carService) {
         this.carService = carService;
@@ -42,9 +44,10 @@ __decorate([
 ], CarController.prototype, "showAllCars", null);
 __decorate([
     common_1.Post(),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [car_dto_1.CarDTO]),
     __metadata("design:returntype", void 0)
 ], CarController.prototype, "createCar", null);
 __decorate([
@@ -56,6 +59,7 @@ __decorate([
 ], CarController.prototype, "readCar", null);
 __decorate([
     common_1.Put(':id'),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Param('id')),
     __param(1, common_1.Body()),
     __metadata("design:type", Function),

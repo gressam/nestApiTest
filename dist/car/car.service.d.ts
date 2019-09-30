@@ -8,7 +8,5 @@ export declare class CarService {
     create(data: CarDTO): Promise<CarEntity>;
     read(id: string): Promise<CarEntity>;
     update(id: string, data: Partial<CarDTO>): Promise<CarEntity>;
-    destroy(id: string): Promise<{
-        deleted: boolean;
-    }>;
+    destroy(id: string): Promise<CarEntity>;
 }
