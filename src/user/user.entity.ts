@@ -1,7 +1,8 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserroleEntity } from '../userrole/userrole.entity';
+import { OrderEntity } from '../order/order.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -29,6 +30,12 @@ export class UserEntity {
   @ManyToOne(type => UserroleEntity, userrole => userrole.users, { cascade: true })
   @JoinColumn({ name: 'userRoleId' })
   userRole: UserroleEntity;
+
+  @OneToMany(type => OrderEntity, order => order.customer, {cascade: true})
+  creatingOrders: OrderEntity[];
+
+  @OneToMany(type => OrderEntity, order => order.execuror, {cascade: true})
+  executedOrders: OrderEntity[];
 
   @BeforeInsert()
   async hashPassword() {
