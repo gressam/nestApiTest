@@ -21,13 +21,16 @@ let UserService = class UserService {
         this.userRepository = userRepository;
     }
     async showAll() {
-        const users = await this.userRepository.find();
+        const users = await this.userRepository.find({ relations: ['userRole'], cache: true });
         return users.map(user => user.toResponseObject(false));
     }
     async login(data) {
         const { username, password } = data;
-        const user = await this.userRepository.findOne({ where: { username } });
-        common_1.Logger.log(`user: ${user}, compare password: ${await user.comparePassword(password)}`);
+        const user = await this.userRepository.findOne({
+            where: { username },
+            relations: ['userRole'],
+            cache: true,
+        });
         if (!user || !(await user.comparePassword(password))) {
             throw new common_1.HttpException('Invalid username/ password', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -41,7 +44,30 @@ let UserService = class UserService {
         }
         user = await this.userRepository.create(data);
         await this.userRepository.save(user);
+        user = await this.userRepository.findOne({ where: { id: user.id }, relations: ['userRole'], cache: true });
         return user.toResponseObject();
+    }
+    async delete(id) {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) {
+            throw new common_1.HttpException('User not exists', common_1.HttpStatus.NOT_FOUND);
+        }
+        await this.userRepository.delete({ id });
+        return user;
+    }
+    async getUserById(id) {
+        const user = await this.userRepository.findOne({ where: { id }, relations: ['userRole'], cache: true });
+        if (!user) {
+            throw new common_1.HttpException('User not exists', common_1.HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
+    async getUserRoleByUsername(username) {
+        const user = await this.userRepository.findOne({ where: { username }, relations: ['userRole'], cache: true });
+        if (!user) {
+            throw new common_1.HttpException('User not exists', common_1.HttpStatus.NOT_FOUND);
+        }
+        return user.userRole;
     }
 };
 UserService = __decorate([

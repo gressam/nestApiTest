@@ -17,6 +17,7 @@ const user_service_1 = require("./user.service");
 const user_dto_1 = require("./user.dto");
 const validation_pipe_1 = require("../shared/validation.pipe");
 const auth_guard_1 = require("../shared/auth.guard");
+const admin_guard_1 = require("../shared/admin.guard");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -30,10 +31,13 @@ let UserController = class UserController {
     register(data) {
         return this.userService.register(data);
     }
+    delete(id) {
+        this.userService.delete(id);
+    }
 };
 __decorate([
-    common_1.Get('api/users'),
-    common_1.UseGuards(new auth_guard_1.AuthGuard()),
+    common_1.Get('users'),
+    common_1.UseGuards(admin_guard_1.AdminGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
@@ -54,6 +58,15 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.UserDTO]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "register", null);
+__decorate([
+    common_1.Delete('users/:id'),
+    common_1.UseGuards(new auth_guard_1.AuthGuard()),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
+    __param(0, common_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "delete", null);
 UserController = __decorate([
     common_1.Controller(),
     __metadata("design:paramtypes", [user_service_1.UserService])

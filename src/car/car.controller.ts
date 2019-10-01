@@ -3,7 +3,7 @@ import { CarService } from './car.service';
 import { CarDTO } from './car.dto';
 import { ValidationPipe } from '../shared/validation.pipe';
 
-@Controller('api/car')
+@Controller('car')
 export class CarController {
 
   constructor(private carService: CarService) {

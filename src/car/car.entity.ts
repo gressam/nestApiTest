@@ -1,8 +1,11 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('car')
 export class CarEntity {
-  @PrimaryGeneratedColumn('uuid') id: string;
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    name: 'id',
+  }) id: string;
 
   @CreateDateColumn() created: Date;
 

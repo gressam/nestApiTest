@@ -1,11 +1,15 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import { UserroleEntity } from '../userrole/userrole.entity';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn({
+    name: 'id',
+    type: 'int',
+  })
+  id: number;
 
   @CreateDateColumn()
   created: Date;
@@ -19,14 +23,21 @@ export class UserEntity {
   @Column('text')
   password: string;
 
+  @Column('userRoleId')
+  userRoleId: number;
+
+  @ManyToOne(type => UserroleEntity, userrole => userrole.users, { cascade: true })
+  @JoinColumn({ name: 'userRoleId' })
+  userRole: UserroleEntity;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
   toResponseObject(showToken: boolean = true) {
-    const { id, created, username, token } = this;
-    return showToken ? { id, created, username, token } : { id, created, username };
+    const { id, created, username, token, userRole: { name } } = this;
+    return showToken ? { id, created, username, token, role: name } : { id, created, username, role: name };
   }
 
   async comparePassword(attempt: string) {
@@ -34,7 +45,7 @@ export class UserEntity {
   }
 
   private get token() {
-    const { id, username } = this;
-    return jwt.sign({ id, username }, process.env.SECRET, { expiresIn: '7d' });
+    const { username, userRole: { name } } = this;
+    return jwt.sign({ username, role: name }, process.env.SECRET, { expiresIn: '7d' });
   }
 }

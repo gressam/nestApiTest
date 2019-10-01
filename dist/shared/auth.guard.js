@@ -18,6 +18,9 @@ let AuthGuard = class AuthGuard {
         return true;
     }
     async validateToken(auth) {
+        if (!auth) {
+            throw new common_1.HttpException('Authorization header is empty', common_1.HttpStatus.NOT_FOUND);
+        }
         if (auth.split(' ')[0] !== 'Bearer') {
             throw new common_1.HttpException('Invalid token', common_1.HttpStatus.FORBIDDEN);
         }

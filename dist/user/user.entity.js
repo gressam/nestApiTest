@@ -12,25 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const userrole_entity_1 = require("../userrole/userrole.entity");
 let UserEntity = class UserEntity {
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
     }
     toResponseObject(showToken = true) {
-        const { id, created, username, token } = this;
-        return showToken ? { id, created, username, token } : { id, created, username };
+        const { id, created, username, token, userRole: { name } } = this;
+        return showToken ? { id, created, username, token, role: name } : { id, created, username, role: name };
     }
     async comparePassword(attempt) {
         return await bcrypt.compare(attempt, this.password);
     }
     get token() {
-        const { id, username } = this;
-        return jwt.sign({ id, username }, process.env.SECRET, { expiresIn: '7d' });
+        const { username, userRole: { name } } = this;
+        return jwt.sign({ username, role: name }, process.env.SECRET, { expiresIn: '7d' });
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
-    __metadata("design:type", String)
+    typeorm_1.PrimaryGeneratedColumn({
+        name: 'id',
+        type: 'int',
+    }),
+    __metadata("design:type", Number)
 ], UserEntity.prototype, "id", void 0);
 __decorate([
     typeorm_1.CreateDateColumn(),
@@ -47,6 +51,15 @@ __decorate([
     typeorm_1.Column('text'),
     __metadata("design:type", String)
 ], UserEntity.prototype, "password", void 0);
+__decorate([
+    typeorm_1.Column('userRoleId'),
+    __metadata("design:type", Number)
+], UserEntity.prototype, "userRoleId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => userrole_entity_1.UserroleEntity, userrole => userrole.users, { cascade: true }),
+    typeorm_1.JoinColumn({ name: 'userRoleId' }),
+    __metadata("design:type", userrole_entity_1.UserroleEntity)
+], UserEntity.prototype, "userRole", void 0);
 __decorate([
     typeorm_1.BeforeInsert(),
     __metadata("design:type", Function),

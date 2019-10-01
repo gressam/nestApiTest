@@ -15,6 +15,11 @@ export class AuthGuard implements CanActivate {
   }
 
   async validateToken(auth: string) {
+
+    if (!auth) {
+      throw new HttpException('Authorization header is empty', HttpStatus.NOT_FOUND);
+    }
+
     if (auth.split(' ')[0] !== 'Bearer') {
       throw new HttpException('Invalid token', HttpStatus.FORBIDDEN);
     }

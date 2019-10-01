@@ -13,7 +13,10 @@ const typeorm_1 = require("typeorm");
 let CarEntity = class CarEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
+    typeorm_1.PrimaryGeneratedColumn({
+        type: 'int',
+        name: 'id',
+    }),
     __metadata("design:type", String)
 ], CarEntity.prototype, "id", void 0);
 __decorate([
