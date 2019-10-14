@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
 import { CityService } from './city.service';
 import { CityDTO } from './city.dto';
+import { AdminGuard } from '../shared/admin.guard';
+import { HttpErrorFilter } from '../shared/http-error.filter';
 
 @Controller('city')
 export class CityController {
@@ -13,6 +15,8 @@ export class CityController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
+  @UsePipes(HttpErrorFilter)
   create(
     @Body() data: Partial<CityDTO>,
   ) {
@@ -27,6 +31,7 @@ export class CityController {
   }
 
   @Put(':id')
+  @UseGuards(AdminGuard)
   update(
     @Param('id') id: number,
     @Body() data: Partial<CityDTO>,
@@ -35,6 +40,7 @@ export class CityController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   delete(
     @Param('id') id: number,
   ) {

@@ -3,6 +3,8 @@ import { OrderEntity } from '../order/order.entity';
 import { CountryEntity } from '../country/country.entity';
 import { RegionEntity } from '../region/region.entity';
 import { CityEntity } from '../city/city.entity';
+import { UserInfoEntity } from '../user-info/user-info.entity';
+import { userInfo } from 'os';
 
 @Entity('address')
 export class AddressEntity {
@@ -30,6 +32,9 @@ export class AddressEntity {
   @Column()
   flat: number;
 
+  @Column()
+  userInfoId;
+
   @OneToMany(() => OrderEntity, orderEntity => orderEntity.address)
   orders: OrderEntity[];
 
@@ -38,11 +43,14 @@ export class AddressEntity {
   country: CountryEntity;
 
   @ManyToOne(() => RegionEntity, regionEntity => regionEntity.addresses)
-  @JoinColumn({name: 'regionId'})
+  @JoinColumn({ name: 'regionId' })
   region: RegionEntity;
 
   @ManyToOne(() => CityEntity, cityEntity => cityEntity.addresses)
-  @JoinColumn({name: 'cityId'})
+  @JoinColumn({ name: 'cityId' })
   city: CityEntity;
-}
 
+  @ManyToOne(() => UserInfoEntity, userInfoEntity => userInfoEntity.addresses)
+  @JoinColumn({ name: 'userInfoId' })
+  userInfo;
+}

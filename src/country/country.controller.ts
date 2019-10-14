@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CountryDTO } from './country.dto';
 import { HttpErrorFilter } from '../shared/http-error.filter';
+import { AdminGuard } from '../shared/admin.guard';
 
 @Controller('country')
 export class CountryController {
@@ -15,6 +16,7 @@ export class CountryController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   @UsePipes(HttpErrorFilter)
   create(@Body() data: CountryDTO,
   ) {
@@ -29,6 +31,7 @@ export class CountryController {
   }
 
   @Put(':id')
+  @UseGuards(AdminGuard)
   @UsePipes(HttpErrorFilter)
   update(
     @Param('id') id: number,
@@ -38,6 +41,7 @@ export class CountryController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   delete(
     @Param('id') id: number,
   ) {

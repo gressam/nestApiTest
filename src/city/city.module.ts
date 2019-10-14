@@ -5,13 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CityEntity } from './city.entity';
 import { RegionEntity } from '../region/region.entity';
 import { AddressEntity } from '../address/address.entity';
-import { OrderEntity } from '../order/order.entity';
-import { CountryEntity } from '../country/country.entity';
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CityEntity, RegionEntity, AddressEntity, OrderEntity, CountryEntity])],
+  imports: [TypeOrmModule.forFeature([CityEntity, RegionEntity, AddressEntity, UserEntity])],
   controllers: [CityController],
-  providers: [CityService],
+  providers: [CityService, UserService],
 })
 export class CityModule {
 }

@@ -1,8 +1,10 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserroleEntity } from '../userrole/userrole.entity';
 import { OrderEntity } from '../order/order.entity';
+import { UserInfoEntity } from '../user-info/user-info.entity';
+import { OfferEntity } from '../offer/offer.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -27,15 +29,25 @@ export class UserEntity {
   @Column('userRoleId')
   userRoleId: number;
 
+  @Column()
+  infoId;
+
   @ManyToOne(type => UserroleEntity, userrole => userrole.users, { cascade: true })
   @JoinColumn({ name: 'userRoleId' })
   userRole: UserroleEntity;
 
-  @OneToMany(type => OrderEntity, order => order.customer, {cascade: true})
+  @OneToMany(type => OrderEntity, order => order.customer, { cascade: true })
   creatingOrders: OrderEntity[];
 
-  @OneToMany(type => OrderEntity, order => order.execuror, {cascade: true})
+  @OneToMany(type => OrderEntity, order => order.execuror, { cascade: true })
   executedOrders: OrderEntity[];
+
+  @OneToOne(() => UserInfoEntity, info => info.user, { cascade: true })
+  @JoinColumn({ name: 'infoId' })
+  info: UserInfoEntity;
+
+  @OneToMany(type => OfferEntity, offerEntity => offerEntity.order, { cascade: true })
+  offers: OfferEntity[];
 
   @BeforeInsert()
   async hashPassword() {
